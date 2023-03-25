@@ -1,0 +1,24 @@
+name: Build sdcard.img
+
+on:
+  - push
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: defconfig
+        run: make akiduki_am3352_defconfig
+
+      - name: build
+        run: make -j $(nproc)
+
+      - name: archive sdcard.img
+        uses: actions/upload-artifact@v3
+        with:
+          name: sdcard
+          path: output/images/sdcard.img
